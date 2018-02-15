@@ -24,7 +24,7 @@ while i<nbrows:
         #print temp
         if temp>maxtemp:
             maxtemp = temp
-        print maxtemp
+        #print maxtemp
         
         j+=1
     i+=1

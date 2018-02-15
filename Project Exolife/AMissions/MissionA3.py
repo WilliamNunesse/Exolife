@@ -3,7 +3,7 @@ import numpy as np
 import os
 import sys
 
-marssurface = Image.open('Mars_surface.pbm')
+europasurface = Image.open('Europa_surface.pbm')
 #marssurface.show()
 
 
@@ -12,33 +12,32 @@ marssurface = Image.open('Mars_surface.pbm')
 #print "Size in byte is: {}".format(sizebyte)
 #sizebytefile = os.path.getsize("/home/william/Desktop/anemona.jpeg")
 #print "Actual file size in byte is: {}".format(sizebytefile)
-pixels = np.array(marssurface)
+pixels = np.array(europasurface)
 #print pixels
-percentgaz = 0
-gaz = 0
-totgaz = 0
-totpercentgaz = 0
-nbrows = marssurface.size[1]
+heatmin = 230
+temp = 0
+nbrows = europasurface.size[1]
 print nbrows
-nblines = marssurface.size[0]
+nblines = europasurface.size[0]
 print nblines
+heatriver = np.zeros((nbrows,nblines))
 i=0
 j=0
 
 while i<nbrows:
     while j<nblines:
         #print pixels[i,j]
-        gaz = pixels[i,j]
-        totgaz = gaz + totgaz
-        print gaz
-        percentgaz = gaz/2.56
-        totpercentgaz = percentgaz + totpercentgaz
-        print percentgaz
-
+        temp = pixels[i,j]
+        #print temp
+        if temp < heatmin:
+            heatriver[i,j]=0
+            #print heatriver[i,j]
+        else:
+            heatriver[i,j]= temp
+            #print heatriver[i,j]
         j+=1
     i+=1
     j=0
-percentgazfin = totpercentgaz/(nblines*nbrows)
-print percentgazfin
-percentgazfin = (totgaz/2.59)/(nblines*nbrows)
-print percentgazfin
+#print heatriver
+europheatimg = Image.fromarray(heatriver.astype('uint8'))
+europheatimg.show()
