@@ -1,21 +1,34 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import ndimage
 from PIL import Image
+from PIL import ImageFilter
+from PIL import ImageOps 
+import numpy as np 
+import matplotlib.pyplot as plt
 
-u2photo = Image.open('U2_surface.pbm')
-#pixels = np.array(u2photo)
+U2_surface = Image.open('U2_surface.pbm')
 
-dx = ndimage.sobel(u2photo, 0)
-dy = ndimage.sobel(u2photo, 1)
-pixels = np.hypot(dx, dy)
-pixels = (255/np.max(pixels))*pixels
 
-#contour = ndimage.sobel(pixels)
-print pixels
-contourimg = Image.fromarray(pixels.astype('uint8'))
-contourimg.show()
+U2_surface = U2_surface.filter(ImageFilter.FIND_EDGES())
+nblines = U2_surface.size[1]
+nbrows = U2_surface.size[0]
 
-#u2img = scipy.misc.imread('U2_surface.pbm')
-#u2img = u2img.astype('int32')
-#dx = ndimage.sobel
+i=0
+j=0
+
+while i<nbrows:
+    while j<nblines:
+    	pixels = U2_surface.getpixel((i, j))
+        if pixels>190:
+        	U2_surface.putpixel((i, j), 0)
+        else:
+        	U2_surface.putpixel((i, j), 255)
+        
+        j+=1
+    i+=1
+    j=0
+
+
+
+
+#U2_surface = U2_surface.filter(ImageFilter.MedianFilter(3))
+
+U2_surface.show()
